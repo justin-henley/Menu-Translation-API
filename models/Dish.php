@@ -11,6 +11,8 @@ class Dish
     public $meatId;
     public $categoryId;
     public $languageId = 1;
+    public $nameForeign;
+
 
     /**
      * Constructor
@@ -44,7 +46,7 @@ class Dish
         $query =
             "SELECT 
                 dishes.id,
-                dish_translations.name,
+                dish_translations.dishName,
                 cat_translations.name,
                 meat_translations.name
             FROM (((dishes
@@ -61,5 +63,53 @@ class Dish
         $stmt->execute();
 
         return $stmt;
+    }
+
+    // Read a single dish by id
+    public function readSingle()
+    {
+        // Create query
+        $query =
+            "SELECT 
+                dishes.id,
+                dish_translations.dishName,
+                dish_translations.dishDescrip,
+                cat_translations.name,
+                meat_translations.name
+            FROM (((dishes
+            INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
+            INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
+            INNER JOIN meat_translations ON dishes.meatId = meat_translations.meatId)
+            WHERE dishes.id = :id
+            LIMIT 0,1";
+
+        // Prepare the statement
+        $stmt = $this->connection->prepare($query);
+
+        // Clean data
+        $this->id = htmlspecialchars(strip_tags($this->id));
+
+        // Bind id
+        $stmt->bindValue(':id', $this->id);
+
+        // Execute the statement
+        $stmt->execute();
+
+        // Return the statement
+        return $stmt;
+    }
+
+    // Search by Traditional Chinese name
+    public function searchZHTW()
+    {
+        // TODO
+        return null;
+    }
+
+    // Search by foreign name with language
+    public function searchForeign()
+    {
+        // TODO
+        return null;
     }
 }
