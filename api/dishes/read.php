@@ -34,7 +34,8 @@ if ($result->rowCount() > 0) {
         extract($row);
 
         $dishEntry = [
-            'id' => $id
+            'id' => $id,
+            'nameZHTW' => $nameZHTW
         ];
 
         // Push entry to array
