@@ -53,8 +53,8 @@ class Dish
                 dishes.id,
                 dishes.nameZHTW,
                 dish_translations.dishName,
-                cat_translations.name,
-                meat_translations.name
+                cat_translations.name AS categoryName,
+                meat_translations.name AS meatName
             FROM (((dishes
             INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
             INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
