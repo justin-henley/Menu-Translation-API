@@ -140,7 +140,36 @@ class Dish
     // Search by foreign name with language
     public function searchForeign()
     {
-        // TODO
-        return null;
+        // Return early if no name is set
+        if (!$this->nameForeign) return null;
+
+        // Create query
+        $query =
+            "SELECT 
+                dishes.id,
+                dishes.nameZHTW
+                dish_translations.dishName,
+                cat_translations.name,
+                meat_translations.name
+            FROM (((dishes
+            INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
+            INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
+            INNER JOIN meat_translations ON dishes.meatId = meat_translations.meatId)
+            WHERE dish_translations.dishName LIKE '%:nameForeign%'
+            ORDER BY dishes.id";
+
+        // Prepare the statement
+        $stmt = $this->connection->prepare($query);
+
+        // Clean data
+        $this->nameForeign = htmlspecialchars(strip_tags($this->nameForeign));
+
+        // Bind id
+        $stmt->bindValue(':nameForeign', $this->nameForeign);
+
+        // Execute the statement
+        $stmt->execute();
+
+        return $stmt;
     }
 }
