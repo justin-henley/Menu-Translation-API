@@ -7,6 +7,10 @@ class Database
     // DB Connect
     public function connect()
     {
+        // Loads the local environment when working locally
+        include_once "./localEnv.php";
+
+
         $this->connection = null;
 
         $url = getenv('JAWSDB_URL');
