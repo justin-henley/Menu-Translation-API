@@ -14,7 +14,7 @@ $connection = $database->connect();
 $dish = new Dish($connection);
 
 // Check if an id was provided and store it
-$dish->idd = isset($_GET['id'])
+$dish->id = isset($_GET['id'])
     ? $_GET['id']
     : null;
 
