@@ -31,12 +31,18 @@ if ($result->rowCount() > 0) {
 
     // Iterate over the rows
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        //extract($row);
-        echo $row;
-        /* $dishEntry = [
-            '' => ,
-        ]; */
+        extract($row);
+
+        $dishEntry = [
+            'id' => $id
+        ];
+
+        // Push entry to array
+        array_push($dishArr, $dishEntry);
     }
+
+    // Turn into JSON and output
+    echo json_encode($dishArr);
 } else {
     // No dishes found
     echo json_encode(['message' => 'No Dishes Found']);
