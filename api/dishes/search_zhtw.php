@@ -17,8 +17,8 @@ $dish = new Dish($connection);
 $dish->nameZHTW = isset($_GET['name_zhtw'])
     ? $_GET['name_zhtw']
     : null;
-$dish->languageId = isset($_GET['languageId'])
-    ? $_GET['languageId']
+$dish->languageId = isset($_GET['languageid'])
+    ? $_GET['languageid']
     : $dish->languageId;
 
 // Search for all dish entries like the Chinese name
