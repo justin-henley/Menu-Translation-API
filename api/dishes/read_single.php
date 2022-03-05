@@ -38,9 +38,10 @@ if ($result->rowCount() > 0) {
     $dishArr = [
         'id' => $id,
         'nameZHTW' => $nameZHTW,
-        'dishName' => $dishName,
         'categoryName' => $categoryName,
-        'meatName' => $meatName
+        'meatName' => $meatName,
+        'dishName' => $dishName,
+        'dishDescrip' => $dishDescrip
     ];
 
     // Convert to JSON and output
