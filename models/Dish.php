@@ -23,9 +23,14 @@ class Dish
         $this->connection = $dbConnection;
     }
 
-    // Read all dishes
+    // Read all dishes for the given language
     public function read()
     {
+        // Clean data before building where clause
+        $this->languageId = htmlspecialchars(strip_tags($this->languageId));
+        $this->meatId = htmlspecialchars(strip_tags($this->meatId));
+        $this->categoryId = htmlspecialchars(strip_tags($this->categoryId));
+
         // Build a WHERE clause if a meat or category is set
         $where = "";
 
@@ -33,13 +38,13 @@ class Dish
             // Create the arguments
             $args = [];
             if ($this->meatId) {
-                array_push($args, "dishes.meatId = {$this->meatId}");
+                array_push($args, "dishes.meatId = :meatId");
             }
             if ($this->categoryId) {
-                array_push($args, "dishes.categoryId = {$this->categoryId}");
+                array_push($args, "dishes.categoryId = :categoryId");
             }
             // Create the WHERE clause
-            $where = "WHERE " . implode(" AND ", $args);
+            $where = " AND " . implode(" AND ", $args);
         }
 
         // Create query
@@ -54,11 +59,16 @@ class Dish
             INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
             INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
             INNER JOIN meat_translations ON dishes.meatId = meat_translations.meatId)
-            {$where}
+            WHERE dish_translations.languageId = :languageId {$where}
             ORDER BY dishes.id";
 
         // Prepare the statement
         $stmt = $this->connection->prepare($query);
+
+        // Bind parameters if needed
+        $stmt->bindValue(':languageId', $this->languageId);
+        if ($this->meatId) $stmt->bindValue(':meatId', $this->meatId);
+        if ($this->categoryId) $stmt->bindValue(':categoryId', $this->categoryId);
 
         // Execute the statement
         $stmt->execute();
@@ -82,7 +92,7 @@ class Dish
             INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
             INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
             INNER JOIN meat_translations ON dishes.meatId = meat_translations.meatId)
-            WHERE dishes.id = :id
+            WHERE dishes.id = :id AND dish_translations.languageId = :languageId
             LIMIT 0,1";
 
         // Prepare the statement
@@ -90,9 +100,11 @@ class Dish
 
         // Clean data
         $this->id = htmlspecialchars(strip_tags($this->id));
+        $this->languageId = htmlspecialchars(strip_tags($this->languageId));
 
-        // Bind id
+        // Bind parameters
         $stmt->bindValue(':id', $this->id);
+        $stmt->bindValue(':languageId', $this->languageId);
 
         // Execute the statement
         $stmt->execute();
@@ -119,7 +131,7 @@ class Dish
             INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
             INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
             INNER JOIN meat_translations ON dishes.meatId = meat_translations.meatId)
-            WHERE dishes.nameZHTW LIKE '%:nameZHTW%'
+            WHERE dishes.nameZHTW LIKE '%:nameZHTW%'  AND dish_translations.languageId = :languageId
             ORDER BY dishes.id";
 
         // Prepare the statement
@@ -127,9 +139,11 @@ class Dish
 
         // Clean data
         $this->nameZHTW = htmlspecialchars(strip_tags($this->nameZHTW));
+        $this->languageId = htmlspecialchars(strip_tags($this->languageId));
 
         // Bind id
         $stmt->bindValue(':nameZHTW', $this->nameZHTW);
+        $stmt->bindValue(':languageId', $this->languageId);
 
         // Execute the statement
         $stmt->execute();
@@ -155,7 +169,7 @@ class Dish
             INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
             INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
             INNER JOIN meat_translations ON dishes.meatId = meat_translations.meatId)
-            WHERE dish_translations.dishName LIKE '%:nameForeign%'
+            WHERE dish_translations.dishName LIKE '%:nameForeign%' AND dish_translations.languageId = :languageId
             ORDER BY dishes.id";
 
         // Prepare the statement
@@ -163,9 +177,11 @@ class Dish
 
         // Clean data
         $this->nameForeign = htmlspecialchars(strip_tags($this->nameForeign));
+        $this->languageId = htmlspecialchars(strip_tags($this->languageId));
 
         // Bind id
         $stmt->bindValue(':nameForeign', $this->nameForeign);
+        $stmt->bindValue(':languageId', $this->languageId);
 
         // Execute the statement
         $stmt->execute();
