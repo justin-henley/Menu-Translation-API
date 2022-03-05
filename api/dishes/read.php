@@ -31,13 +31,14 @@ if ($result->rowCount() > 0) {
 
     // Iterate over the rows
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        echo json_encode($row);
         extract($row);
 
         $dishEntry = [
             'id' => $id,
-            'nameZHTW' => $nameZHTW
-
+            'nameZHTW' => $nameZHTW,
+            'dishName' => $dishName,
+            'categoryName' => $categoryName,
+            'meatName' => $meatName
         ];
 
         // Push entry to array
