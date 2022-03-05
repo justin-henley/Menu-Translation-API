@@ -14,8 +14,8 @@ $connection = $database->connect();
 $dish = new Dish($connection);
 
 // Check if a Chinese name and language was provided and store it
-$dish->nameZHTW = isset($_GET['nameZHTW'])
-    ? $_GET['nameZHTW']
+$dish->nameZHTW = isset($_GET['name_zhtw'])
+    ? $_GET['name_zhtw']
     : null;
 $dish->languageId = isset($_GET['languageId'])
     ? $_GET['languageId']
