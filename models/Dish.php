@@ -123,7 +123,7 @@ class Dish
         $query =
             "SELECT 
                 dishes.id,
-                dishes.nameZHTW
+                dishes.nameZHTW,
                 dish_translations.dishName,
                 cat_translations.name AS categoryName,
                 meat_translations.name AS meatName
@@ -161,7 +161,7 @@ class Dish
         $query =
             "SELECT 
                 dishes.id,
-                dishes.nameZHTW
+                dishes.nameZHTW,
                 dish_translations.dishName,
                 cat_translations.name AS categoryName,
                 meat_translations.name AS meatName
