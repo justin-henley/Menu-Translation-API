@@ -13,10 +13,13 @@ $connection = $database->connect();
 // Instantiate dish object
 $dish = new Dish($connection);
 
-// Check if an id was provided and store it
-$dish->id = isset($_GET['id'])
-    ? $_GET['id']
+// Check if an id and language was provided and store them
+$dish->id = isset($_GET['dishId'])
+    ? $_GET['dishId']
     : null;
+$dish->languageId = isset($_GET['languageId'])
+    ? $_GET['languageId']
+    : $dish->languageId;
 
 // Return early if parameters missing
 if (empty($dish->id)) {

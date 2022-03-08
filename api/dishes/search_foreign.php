@@ -14,11 +14,11 @@ $connection = $database->connect();
 $dish = new Dish($connection);
 
 // Check if a Chinese name and language was provided and store it
-$dish->nameForeign = isset($_GET['name_foreign'])
-    ? $_GET['name_foreign']
+$dish->nameForeign = isset($_GET['nameForeign'])
+    ? $_GET['nameForeign']
     : null;
-$dish->languageId = isset($_GET['languageid'])
-    ? $_GET['languageid']
+$dish->languageId = isset($_GET['languageId'])
+    ? $_GET['languageId']
     : $dish->languageId;
 
 // Search for all dish entries like the Chinese name
