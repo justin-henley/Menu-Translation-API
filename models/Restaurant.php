@@ -6,7 +6,7 @@ class Restaurant
 
     // Properties
     public $restaurantId;
-    public $languageId = 1;
+    public $languageId;
 
     /**
      * Constructor
@@ -17,10 +17,29 @@ class Restaurant
         $this->connection = $dbConnection;
     }
 
-    // Reads all restaurant entries in a given language, or just returns all valid restaurant ids
+    // Reads all restaurant entries in a given language
     public function read()
     {
-        return null;
+        // Create query
+        $query =
+            "SELECT
+                restaurants.id AS restaurantId,
+                rest_names.name AS restaurantName
+            FROM restaurants
+            INNER JOIN rest_names ON restaurants.id = rest_names.restaurantId
+            WHERE rest_names.languageId = :languageId
+            ORDER BY restaurantName";
+
+        // Prepare the statement
+        $stmt = $this->connection->prepare($query);
+
+        // Bind parameters
+        $stmt->bindValue(':languageId', $this->languageId);
+
+        // Execute the statement
+        $stmt->execute();
+
+        return $stmt;
     }
 
     // Reads a given restaurants name in the given language, or in all languages if none specified
