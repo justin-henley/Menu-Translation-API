@@ -17,7 +17,7 @@ if ($requestMethod === 'OPTIONS') {
 switch ($requestMethod) {
     case 'GET':
         // Search for a single result by dish id
-        if (isset($_GET['dishId'])) require './read_single.php';
+        if (isset($_GET['id'])) require './read_single.php';
         // Search for any results like the given name
         else if (isset($_GET['name'])) require './search.php';
         // Search for all results without including translations, possibly filtering by category and meat type
