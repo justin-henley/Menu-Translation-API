@@ -18,30 +18,32 @@ class Restaurant
         $this->connection = $dbConnection;
     }
 
-    // Reads all restaurant entries in a given language
+    // Reads all restaurant entries in a given language, or all name entries in all languages if a language is not specified
     public function read()
     {
-        // Return early if no language provided
-        if (!$this->languageId) return null;
+        // Clean data
+        $this->languageId = htmlspecialchars(strip_tags($this->languageId));
+
+        // Build where clause to filter by language
+        $where = ($this->languageId)
+            ? "WHERE languageId = :languageId"
+            : "";
 
         // Create query
         $query =
             "SELECT
-                restaurants.id AS restaurantId,
-                rest_names.name AS restaurantName
-            FROM restaurants
-            INNER JOIN rest_names ON restaurants.id = rest_names.restaurantId
-            WHERE rest_names.languageId = :languageId
-            ORDER BY restaurantName";
+                restaurantId,
+                name AS restaurantName,
+                languageId
+            FROM rest_names
+            {$where}
+            ORDER BY restaurantId";
 
         // Prepare the statement
         $stmt = $this->connection->prepare($query);
 
-        // Clean data
-        $this->languageId = htmlspecialchars(strip_tags($this->languageId));
-
         // Bind parameters
-        $stmt->bindValue(':languageId', $this->languageId);
+        if ($this->languageId) $stmt->bindValue(':languageId', $this->languageId);
 
         // Execute the statement
         $stmt->execute();
@@ -68,11 +70,11 @@ class Restaurant
         // Create query
         $query =
             "SELECT
+                rest_names.restaurantId,
                 rest_names.name AS restaurantName,
                 rest_names.languageId
-            FROM restaurants
-            INNER JOIN rest_names ON restaurants.id = rest_names.restaurantId
-            WHERE restaurants.id = :restaurantId {$lang}";
+            FROM rest_names 
+            WHERE rest_names.restaurantId = :restaurantId {$lang}";
 
         // Prepare the statement
         $stmt = $this->connection->prepare($query);
