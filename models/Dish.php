@@ -117,7 +117,7 @@ class Dish
     public function searchZHTW()
     {
         // Return early if no name is set
-        //if (!$this->nameZHTW) return null;
+        if (!$this->nameZHTW) return null;
 
         // Create query
         $query =
@@ -168,7 +168,7 @@ class Dish
             INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
             INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
             INNER JOIN meat_translations ON dishes.meatId = meat_translations.meatId)
-            WHERE dish_translations.dishName LIKE '%:nameForeign%' AND dish_translations.languageId = :languageId
+            WHERE dish_translations.dishName LIKE :nameForeign AND dish_translations.languageId = :languageId
             ORDER BY dishes.id";
 
         // Prepare the statement
@@ -179,7 +179,7 @@ class Dish
         $this->languageId = htmlspecialchars(strip_tags($this->languageId));
 
         // Bind id
-        $stmt->bindValue(':nameForeign', $this->nameForeign);
+        $stmt->bindValue(':nameForeign', "%" . $this->nameForeign . "%");
         $stmt->bindValue(':languageId', $this->languageId);
 
         // Execute the statement
