@@ -49,7 +49,9 @@ class Menu
         // Prepare the statement
         $stmt = $this->connection->prepare($query);
 
-
+        // Clean data
+        $this->restaurantId = htmlspecialchars(strip_tags($this->restaurantId));
+        $this->languageId = htmlspecialchars(strip_tags($this->languageId));
 
         // Bind parameters
         $stmt->bindValue(':restaurantId', $this->restaurantId);
@@ -93,6 +95,11 @@ class Menu
 
         // Prepare the statement
         $stmt = $this->connection->prepare($query);
+
+        // Clean data
+        $this->restaurantId = htmlspecialchars(strip_tags($this->restaurantId));
+        $this->dishId = htmlspecialchars(strip_tags($this->dishId));
+        $this->languageId = htmlspecialchars(strip_tags($this->languageId));
 
         // Bind parameters
         $stmt->bindValue(':restaurantId', $this->restaurantId);
