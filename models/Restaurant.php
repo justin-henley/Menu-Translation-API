@@ -107,6 +107,7 @@ class Restaurant
         // Create query
         $query =
             "SELECT
+                restaurants.id AS restaurantId,
                 rest_names.name AS restaurantName,
                 rest_names.languageId
             FROM restaurants
