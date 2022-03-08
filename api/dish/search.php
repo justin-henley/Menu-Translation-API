@@ -13,7 +13,7 @@ $connection = $database->connect();
 // Instantiate dish object
 $dish = new Dish($connection);
 
-// Check if a Chinese name and language was provided and store it
+// Check if a dish name and language was provided and store it
 $dish->name = isset($_GET['name'])
     ? $_GET['name']
     : null;
