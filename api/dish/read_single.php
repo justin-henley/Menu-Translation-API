@@ -14,8 +14,8 @@ $connection = $database->connect();
 $dish = new Dish($connection);
 
 // Check if an id and language was provided and store them
-$dish->id = isset($_GET['dishId'])
-    ? $_GET['dishId']
+$dish->id = isset($_GET['id'])
+    ? $_GET['id']
     : null;
 $dish->languageId = isset($_GET['languageId'])
     ? $_GET['languageId']
