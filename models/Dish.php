@@ -141,7 +141,7 @@ class Dish
         $this->nameZHTW = htmlspecialchars(strip_tags($this->nameZHTW));
         $this->languageId = htmlspecialchars(strip_tags($this->languageId));
 
-        // Bind id
+        // Bind parameters
         $stmt->bindValue(':name', "%" . $this->nameZHTW . "%");
         $stmt->bindValue(':language_id', $this->languageId);
 
