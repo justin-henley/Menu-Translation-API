@@ -25,7 +25,7 @@ $dish->languageId = isset($_GET['languageid'])
 $result = $dish->searchForeign();
 
 // Check if any dish results were returned
-if ($result->rowCount() > 0) {
+if ($result?->rowCount() > 0) {
     // Create an array to store the results
     $dishArr = [];
 
