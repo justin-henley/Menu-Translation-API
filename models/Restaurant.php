@@ -21,6 +21,9 @@ class Restaurant
     // Reads all restaurant entries in a given language
     public function read()
     {
+        // Return early if no language provided
+        if (!$this->languageId) return null;
+
         // Create query
         $query =
             "SELECT
