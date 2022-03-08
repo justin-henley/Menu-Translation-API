@@ -7,12 +7,10 @@ class Dish
 
     // Properties
     public $id;
-    public $nameZHTW;
+    public $name;
     public $meatId;
     public $categoryId;
     public $languageId = 1;
-    public $nameForeign;
-
 
     /**
      * Constructor
@@ -113,11 +111,11 @@ class Dish
         return $stmt;
     }
 
-    // Search by Traditional Chinese name
-    public function searchZHTW()
+    // Search for name matches in both Traditional Chinese and the specified language
+    public function search()
     {
         // Return early if no name is set
-        if (!$this->nameZHTW) return null;
+        if (!$this->name) return null;
 
         // Create query
         $query =
@@ -131,60 +129,27 @@ class Dish
             INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
             INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
             INNER JOIN meat_translations ON dishes.meatId = meat_translations.meatId)
-            WHERE dishes.nameZHTW LIKE :name AND dish_translations.languageId = :language_id
+            WHERE 
+                (
+                    dishes.nameZHTW LIKE :name 
+                    OR dish_translations.dishName LIKE :name
+                )
+                 AND dish_translations.languageId = :language_id
             ORDER BY dishes.id";
 
         // Prepare the statement
         $stmt = $this->connection->prepare($query);
 
         // Clean data
-        $this->nameZHTW = htmlspecialchars(strip_tags($this->nameZHTW));
+        $this->name = htmlspecialchars(strip_tags($this->name));
         $this->languageId = htmlspecialchars(strip_tags($this->languageId));
 
         // Bind parameters
-        $stmt->bindValue(':name', "%" . $this->nameZHTW . "%");
+        $stmt->bindValue(':name', "%" . $this->name . "%");
         $stmt->bindValue(':language_id', $this->languageId);
 
         // Execute the statement
         $stmt->execute();
-        return $stmt;
-    }
-
-    // Search by foreign name with language
-    public function searchForeign()
-    {
-        // Return early if no name is set
-        if (!$this->nameForeign) return null;
-
-        // Create query
-        $query =
-            "SELECT 
-                dishes.id,
-                dishes.nameZHTW,
-                dish_translations.dishName,
-                cat_translations.name AS categoryName,
-                meat_translations.name AS meatName
-            FROM (((dishes
-            INNER JOIN dish_translations ON dishes.id = dish_translations.dishId)
-            INNER JOIN cat_translations ON dishes.categoryId = cat_translations.categoryId)
-            INNER JOIN meat_translations ON dishes.meatId = meat_translations.meatId)
-            WHERE dish_translations.dishName LIKE :nameForeign AND dish_translations.languageId = :languageId
-            ORDER BY dishes.id";
-
-        // Prepare the statement
-        $stmt = $this->connection->prepare($query);
-
-        // Clean data
-        $this->nameForeign = htmlspecialchars(strip_tags($this->nameForeign));
-        $this->languageId = htmlspecialchars(strip_tags($this->languageId));
-
-        // Bind id
-        $stmt->bindValue(':nameForeign', "%" . $this->nameForeign . "%");
-        $stmt->bindValue(':languageId', $this->languageId);
-
-        // Execute the statement
-        $stmt->execute();
-
         return $stmt;
     }
 }
