@@ -29,7 +29,7 @@ class Menu
         }
 
         // Create query
-        // May want to expand this to include category and meat type and name in a single query for speed
+        // TODO May want to expand this to include category and meat type and name in a single query for speed
         $query =
             "SELECT
                 menu_items.dishId,
@@ -78,7 +78,7 @@ class Menu
                 dishes.meatId,
                 dishes.categoryId,
                 meat_translations.name AS meatName,
-                cat_translations.name AS catName
+                cat_translations.name AS categoryName
             FROM ((((menu_items
             INNER JOIN dishes ON menu_items.dishId = dishes.id)
             INNER JOIN dish_translations ON menu_items.dishId = dish_translations.dishId)
