@@ -5,8 +5,8 @@ class Restaurant
     private $connection;
 
     // Properties
-    public $restaurantId;
-    public $restaurantName;
+    public $id;
+    public $name;
     public $languageId;
 
     /**
@@ -53,12 +53,12 @@ class Restaurant
     public function readSingle()
     {
         // Return early if no id provided
-        if (!$this->restaurantId) return null;
+        if (!$this->id) return null;
 
 
         // Clean data
         $this->languageId = htmlspecialchars(strip_tags($this->languageId));
-        $this->restaurantId = htmlspecialchars(strip_tags($this->restaurantId));
+        $this->id = htmlspecialchars(strip_tags($this->id));
 
         // Create a filter for language if necessary
         $lang = ($this->languageId)
@@ -78,7 +78,7 @@ class Restaurant
         $stmt = $this->connection->prepare($query);
 
         // Bind parameters
-        $stmt->bindValue(':restaurantId', $this->restaurantId);
+        $stmt->bindValue(':restaurantId', $this->id);
         if ($this->languageId) $stmt->bindValue(':languageId', $this->languageId);
 
         // Execute the statement
@@ -89,15 +89,15 @@ class Restaurant
 
     // Searches for all restaurants like the given name in the given language, or in all languages
     // Params: restaurantName (req), languageId (opt)
-    // Returns: restaurant id, name in given language and chinese, possibly all names in all languages
+    // Returns: restaurant id, name that matched the search term, either in a specified language or possibly in all languages
     public function search()
     {
         // Return early if no name provided
-        if (!$this->restaurantName) return null;
+        if (!$this->name) return null;
 
         // Clean data
         $this->languageId = htmlspecialchars(strip_tags($this->languageId));
-        $this->restaurantName = htmlspecialchars(strip_tags($this->restaurantName));
+        $this->name = htmlspecialchars(strip_tags($this->name));
 
         // Create a filter for language if necessary
         $lang = ($this->languageId)
@@ -117,7 +117,7 @@ class Restaurant
         $stmt = $this->connection->prepare($query);
 
         // Bind parameters
-        $stmt->bindValue(':restaurantName', "%" . $this->restaurantName . "%");
+        $stmt->bindValue(':restaurantName', "%" . $this->name . "%");
         if ($this->languageId) $stmt->bindValue(':languageId', $this->languageId);
 
         // Execute statement
