@@ -14,8 +14,8 @@ $connection = $database->connect();
 $dish = new Dish($connection);
 
 // Check if a Chinese name and language was provided and store it
-$dish->nameZHTW = isset($_GET['name'])
-    ? $_GET['name']
+$dish->nameZHTW = isset($_GET['name_zhtw'])
+    ? $_GET['name_zhtw']
     : null;
 $dish->languageId = isset($_GET['languageid'])
     ? $_GET['languageid']
@@ -25,7 +25,7 @@ $dish->languageId = isset($_GET['languageid'])
 $result = $dish->searchZHTW();
 
 // Check if any dish results were returned
-if ($result->rowCount() > 0) {
+if ($result?->rowCount() > 0) {
     // Create an array to store the results
     $dishArr = [];
 
