@@ -12,6 +12,7 @@ if ($requestMethod === 'OPTIONS') {
     header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
 }
 
+// If using this with a front-end causes trouble add an else before the switch
 // Choose the operation to carry out
 switch ($requestMethod) {
     case 'GET':
