@@ -24,6 +24,9 @@ $menu->restaurantId = isset($_GET['restaurantId'])
 $menu->languageId = isset($_GET['languageId'])
     ? $_GET['languageId']
     : $menu->languageId;
+$menu->verbose = isset($_GET['verbose'])
+    ? true
+    : false;
 
 // Return early if parameters missing
 if (
@@ -52,12 +55,16 @@ if ($result->rowCount() > 0) {
             'price' => $price,
             'nameZHTW' => $nameZHTW,
             'dishName' => $dishName,
-            'dishDescrip' => $dishDescrip,
             'categoryId' => $categoryId,
             'categoryName' => $categoryName,
             'meatId' => $meatId,
             'meatName' => $meatName,
         ];
+
+        // Dish description is optional, set by $verbose = true
+        if ($verbose) {
+            $item['dishDescrip'] = $dishDescrip;
+        }
 
         // Push entry to the menu
         array_push($menuItems, $item);
